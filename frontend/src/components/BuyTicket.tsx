@@ -8,7 +8,8 @@ import {
     SimpleGrid,
 } from '@mantine/core';
 import TicketCard from './TicketCard';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import useWebSocket from 'react-use-websocket';
 
 export default function BuyTicketsPage() {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -19,9 +20,20 @@ export default function BuyTicketsPage() {
         }
     }, []);
 
-    const handleBuyClick = (ticketType: string) => {
+    const websocketUrl = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8000';
+    const { sendMessage, lastMessage } = useWebSocket(websocketUrl, {
+        shouldReconnect: () => true,
+    });
+
+    // const handleBuyClick = (ticketType: string) => {
+    //     console.log(`Buying ticket: ${ticketType}`);
+    //     sendMessage(JSON.stringify({ type: 'mint-token', payload: { pubkey: localStorage.getItem('sessionPubKey') } }));
+    // };
+
+    const handleBuyClick = useCallback((ticketType: string) => {
         console.log(`Buying ticket: ${ticketType}`);
-    };
+        sendMessage(JSON.stringify({ type: 'mint-token', payload: { pubkey: localStorage.getItem('sessionPubKey') } }));
+    }, [sendMessage]);
 
     const tickets = [
         {
