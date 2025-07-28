@@ -32,6 +32,7 @@ export class PortalDeamon {
             pubkey: '',
             display_name: 'Lido di Lugano',
             name: 'Lido di Lugano',
+            nip05: 'lidolugano@getportal.cc',
             picture:
                 'https://images.unsplash.com/photo-1494947356691-434358cea5a3?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&dl=annie-spratt-03SU9tzAHvY-unsplash.jpg&w=640',
             nip05: 'lidolugano@getportal.cc',

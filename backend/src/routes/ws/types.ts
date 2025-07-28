@@ -1,4 +1,5 @@
 import type WebSocket from 'ws'
+import type { Ticket } from '../../config/tickets.ts'
 
 export type WebSocketRouterCallback = (
     ws: WebSocket,
@@ -30,6 +31,14 @@ export type LoginDeclinedMessage = {
     payload: {}
 }
 
+export type GetSinglePaymentMessage = {
+    type: 'get-single-payment'
+    payload: {
+        type: Ticket['type']
+        pubkey: string
+    }
+}
+
 export type ErrorMessage = {
     type: 'error'
     payload: {
@@ -37,4 +46,4 @@ export type ErrorMessage = {
     }
 }
 
-export type WebSocketMessage = GetLoginUrlMessage
+export type WebSocketMessage = GetLoginUrlMessage | GetSinglePaymentMessage

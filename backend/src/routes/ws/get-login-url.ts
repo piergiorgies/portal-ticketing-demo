@@ -6,9 +6,7 @@ import type {
     LoginUrlMessage,
 } from './types.ts'
 
-export const handleGetLoginUrl = async (
-    ws: WebSocket,
-): Promise<LoginUrlMessage> => {
+export const handleGetLoginUrl = async (ws: WebSocket) => {
     const client = await PortalDeamon.getClient()
     const loginUrl = await client.newKeyHandshakeUrl(async (mainKey) => {
         const authResponse = await client.authenticateKey(mainKey)
@@ -34,10 +32,12 @@ export const handleGetLoginUrl = async (
         }
     })
 
-    return {
-        type: 'login-url',
-        payload: {
-            loginUrl,
-        },
-    }
+    ws.send(
+        JSON.stringify({
+            type: 'login-url',
+            payload: {
+                loginUrl,
+            },
+        } satisfies LoginUrlMessage),
+    )
 }
