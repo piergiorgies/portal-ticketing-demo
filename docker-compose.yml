@@ -1,0 +1,27 @@
+services:
+  web:
+    build: ./frontend
+    container_name: web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+  backend:
+    build: ./backend
+    container_name: web
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+  deamon:
+    image: getportal/sdk-daemon:latest
+    container_name: daemon
+    restart: unless-stopped
+    ports:
+      - "3002:3000"
+    env_file:
+      - ./backend/.env
+  mint:
+    image: getportal/cdk-mintd:latest
+    container_name: mint
+    restart: unless-stopped
+    ports:
+      - "3003:8085"
