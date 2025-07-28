@@ -1,4 +1,4 @@
-import WebSocket from 'ws'
+import type WebSocket from 'ws'
 import WebSocketRouter from './router.js'
 import { handleGetLoginUrl } from './get-login-url.ts'
 import type { GetSinglePaymentMessage, WebSocketMessage } from './types.ts'
@@ -19,7 +19,7 @@ export function handleWebsocketConnection(ws: WebSocket) {
 
     ws.on('message', async (message) => {
         const data = JSON.parse(message.toString()) as WebSocketMessage
-        router.handle(data, ws)
+        await router.handle(data, ws)
     })
 
     ws.on('close', () => {

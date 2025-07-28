@@ -12,7 +12,7 @@ export const TICKETS: Ticket[] = [
         description:
             'Valid for one adult (18+). All-day access to the beach and pool area.',
         price: 10,
-        priceInMillisats: 1000,
+        priceInMillisats: 10000,
         type: 'adult',
     },
     {
@@ -20,7 +20,7 @@ export const TICKETS: Ticket[] = [
         description:
             'For children under 12. Includes supervised play area access.',
         price: 5,
-        priceInMillisats: 500,
+        priceInMillisats: 5000,
         type: 'child',
     },
     {
@@ -28,7 +28,7 @@ export const TICKETS: Ticket[] = [
         description:
             'Up to 2 adults + 2 children. Full-day access to all areas.',
         price: 25,
-        priceInMillisats: 2500,
+        priceInMillisats: 25000,
         type: 'family',
     },
 ]

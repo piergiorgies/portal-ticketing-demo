@@ -1,26 +1,5 @@
 import WebSocket from 'ws'
-
-export type GetLoginUrlMessage = {
-    type: 'get-login-url'
-    payload: {}
-}
-
-export type LoginUrlMessage = {
-    type: 'login-url'
-    payload: {
-        loginUrl: string
-    }
-}
-
-export type ErrorMessage = {
-    type: 'error'
-    payload: {
-        message: string
-    }
-}
-
-export type WebSocketMessage = GetLoginUrlMessage | LoginUrlMessage | ErrorMessage
-export type WebSocketRouterCallback = (ws: WebSocket, event: WebSocketMessage) => Promise<void>;
+import type { WebSocketRouterCallback, WebSocketMessage } from './types.ts'
 
 export default class WebSocketRouter {
     private readonly routes: Map<string, WebSocketRouterCallback>
