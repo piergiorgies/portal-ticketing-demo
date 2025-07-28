@@ -1,7 +1,7 @@
-import { type Request } from "express"
+import { type Request } from 'express'
 
 export type EnhancedRequest = Request & {
     user: {
-        pubkey: string
+        pubKey: string
     }
 }

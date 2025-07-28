@@ -23,19 +23,20 @@ export type WebSocketMessage = GetLoginUrlMessage | LoginUrlMessage | ErrorMessa
 export type WebSocketRouterCallback = (ws: WebSocket, event: WebSocketMessage) => Promise<void>;
 
 export default class WebSocketRouter {
-    public routes: Map<string, WebSocketRouterCallback>;
+    private readonly routes: Map<string, WebSocketRouterCallback>
 
-    public constructor() {
-        this.routes = new Map();
+    constructor() {
+        this.routes = new Map()
     }
 
     public register(route: string, callback: WebSocketRouterCallback) {
-        this.routes.set(route, callback);
+        this.routes.set(route, callback)
     }
 
-    public async route(route: string, data: WebSocketMessage, ws: WebSocket) {
-        if(this.routes.has(route)) {
-            await this.routes.get(route)!(ws, data);
+    public async handle(data: WebSocketMessage, ws: WebSocket) {
+        const handler = this.routes.get(data.type)
+        if (handler) {
+            await handler(ws, data)
         }
     }
 }

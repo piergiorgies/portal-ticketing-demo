@@ -1,6 +1,6 @@
 import express from 'express'
 import expressWs from 'express-ws'
-import { router } from './routes/index.js'
+import { router, handleWebsocketConnection } from './routes/index.js'
 import { env } from './config/env.ts'
 import cors from 'cors'; 
 
@@ -10,19 +10,15 @@ const corsOptions = {
     credentials: true,
 };
 
-export const { app } = expressWs(express());
+export const { app } = expressWs(express())
 app.use(cors(corsOptions))
+
+app.ws('/ws', (ws) => {
+    handleWebsocketConnection(ws)
+})
 
 app.use('/api', router)
 
 app.get('/', (_req, res) => {
-    res.send('Hello World!')
-})
-
-router.get('/.well-known/nostr.json', (_req, res) => {
-    res.json({
-        names: {
-            lidodilugano: env.PUB_NOSTR_KEY,
-        },
-    })
+    res.send('Service is running')
 })
