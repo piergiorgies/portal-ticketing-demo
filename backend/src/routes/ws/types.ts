@@ -11,6 +11,13 @@ export type GetLoginUrlMessage = {
     payload: {}
 }
 
+export type MintTokenRequest = {
+    type: 'mint-token',
+    payload: {
+        pubkey: string;
+    }
+}
+
 export type LoginUrlMessage = {
     type: 'login-url'
     payload: {
@@ -46,4 +53,4 @@ export type ErrorMessage = {
     }
 }
 
-export type WebSocketMessage = GetLoginUrlMessage | GetSinglePaymentMessage
+export type WebSocketMessage = GetLoginUrlMessage | GetSinglePaymentMessage | MintTokenRequest
