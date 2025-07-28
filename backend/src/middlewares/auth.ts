@@ -1,7 +1,7 @@
-import { type Handler } from "express"
+import { type Handler } from 'express'
 
-import { PortalDeamon } from "../services/portal-deamon.js"
-import type { EnhancedRequest } from "../types.ts"
+import { PortalDeamon } from '../services/portal-deamon.js'
+import type { EnhancedRequest } from '../types.ts'
 
 export const auth: Handler = async (req, res, next) => {
     const authToken = req.headers['authorization'] as string
@@ -13,14 +13,17 @@ export const auth: Handler = async (req, res, next) => {
 
     try {
         const portalDeamon = await PortalDeamon.getClient()
-        const isValid = await portalDeamon.verifyJwt(pubKey, authToken.replace('Bearer ', ''))
+        const isValid = await portalDeamon.verifyJwt(
+            pubKey,
+            authToken.replace('Bearer ', ''),
+        )
 
         if (!isValid?.target_key) {
             return res.status(401).json({ error: 'Invalid token' })
         }
 
-        (req as EnhancedRequest).user = {
-            pubkey: isValid.target_key,
+        ;(req as EnhancedRequest).user = {
+            pubKey,
         }
 
         next()

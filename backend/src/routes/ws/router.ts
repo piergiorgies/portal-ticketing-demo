@@ -1,41 +1,21 @@
 import WebSocket from 'ws'
-
-export type GetLoginUrlMessage = {
-    type: 'get-login-url'
-    payload: {}
-}
-
-export type LoginUrlMessage = {
-    type: 'login-url'
-    payload: {
-        loginUrl: string
-    }
-}
-
-export type ErrorMessage = {
-    type: 'error'
-    payload: {
-        message: string
-    }
-}
-
-export type WebSocketMessage = GetLoginUrlMessage | LoginUrlMessage | ErrorMessage
-export type WebSocketRouterCallback = (ws: WebSocket.WebSocket, event: WebSocketMessage) => Promise<void>;
+import type { WebSocketRouterCallback, WebSocketMessage } from './types.ts'
 
 export default class WebSocketRouter {
-    public routes: Map<string, WebSocketRouterCallback>;
+    private readonly routes: Map<string, WebSocketRouterCallback>
 
-    public constructor() {
-        this.routes = new Map();
+    constructor() {
+        this.routes = new Map()
     }
 
     public register(route: string, callback: WebSocketRouterCallback) {
-        this.routes.set(route, callback);
+        this.routes.set(route, callback)
     }
 
-    public async route(route: string, data: WebSocketMessage, ws: WebSocket.WebSocket) {
-        if(this.routes.has(route)) {
-            await this.routes.get(route)(ws, data);
+    public async handle(data: WebSocketMessage, ws: WebSocket) {
+        const handler = this.routes.get(data.type)
+        if (handler) {
+            await handler(ws, data)
         }
     }
 }

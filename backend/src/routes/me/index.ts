@@ -6,7 +6,7 @@ export const handler: RequestHandler = async (req, res) => {
     const user = (req as EnhancedRequest).user
 
     const portalDeamon = await PortalDeamon.getClient()
-    const userProfile = await portalDeamon.fetchProfile(user.pubkey)
+    const userProfile = await portalDeamon.fetchProfile(user.pubKey)
 
     if (!userProfile) {
         return res.status(404).json({ error: 'User profile not found' })

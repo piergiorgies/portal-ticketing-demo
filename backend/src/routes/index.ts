@@ -5,3 +5,5 @@ import { handler as meHandler } from './me/index.js'
 export const router = express.Router()
 
 router.get('/me', auth, meHandler)
+
+export { handleWebsocketConnection } from './ws/index.js'
