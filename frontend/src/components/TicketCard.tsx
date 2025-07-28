@@ -8,16 +8,27 @@ type TicketCardProps = {
     description: string;
     price: string;
     onClick: () => void;
+    loading?: boolean;
 };
 
-export default function TicketCard({ title, description, price, onClick }: TicketCardProps) {
+export default function TicketCard({ title, description, price, onClick, loading }: TicketCardProps) {
     return (
-        <Card shadow="sm" padding="lg" radius="md" withBorder>
+        <Card
+            shadow="md"
+            padding="lg"
+            radius="md"
+            withBorder
+            style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+            }}
+        >
             <Stack gap="sm">
                 <Group justify="space-between">
                     <Title order={4}>{title}</Title>
                 </Group>
-                <Text size="sm" c="gray.6">
+                <Text size="sm" c="black" style={{ flexGrow: 1 }}>
                     {description}
                 </Text>
                 <Text fw={700} size="lg" c="blue.8">
@@ -30,6 +41,7 @@ export default function TicketCard({ title, description, price, onClick }: Ticke
                     variant="filled"
                     color="blue"
                     onClick={onClick}
+                    loading={loading}
                 >
                     Buy Now
                 </Button>
