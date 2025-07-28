@@ -20,7 +20,8 @@ export const auth: Handler = async (req, res, next) => {
         }
 
         (req as EnhancedRequest).user = {
-            pubkey: isValid.target_key,
+            // pubkey: isValid.target_key,
+            pubkey: pubKey,
         }
 
         next()

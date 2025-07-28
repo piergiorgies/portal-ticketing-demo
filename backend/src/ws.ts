@@ -1,8 +1,8 @@
 import WebSocket from 'ws'
 import { PortalDeamon } from './services/portal-deamon.js'
-import WebSocketRouter, { LoginUrlMessage, WebSocketMessage } from './routes/ws/router.js'
+import WebSocketRouter, { type LoginUrlMessage, type WebSocketMessage } from './routes/ws/router.js'
 
-const handleGetLoginUrl = async (ws: WebSocket.WebSocket): Promise<LoginUrlMessage> => {
+const handleGetLoginUrl = async (ws: WebSocket): Promise<LoginUrlMessage> => {
     const client = await PortalDeamon.getClient()
     const loginUrl = await client.newKeyHandshakeUrl(async (mainKey) => {
         const authResponse = await client.authenticateKey(mainKey)
@@ -37,7 +37,11 @@ router.register('get-login-url', async(ws, data) => {
     ws.send(JSON.stringify(await handleGetLoginUrl(ws)));
 })
 
-export function handleWebsocketConnection(ws: WebSocket.WebSocket) {
+router.register('mint-token', async(ws, data) => {
+    
+});
+
+export function handleWebsocketConnection(ws: WebSocket) {
     console.log('New client connected')
 
     ws.on('message', async(message) => {
