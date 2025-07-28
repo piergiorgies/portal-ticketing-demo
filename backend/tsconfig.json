@@ -1,15 +1,17 @@
 {
-  "buildOptions": {
-    "outDir": "build",
-    "rootDir": "./src",
-    "composite": true,
+  "extends": [
+    "@tsconfig/node-ts/tsconfig.json",
+    "@tsconfig/node22/tsconfig.json"
+  ],
+  "compilerOptions": {
+    "outDir": "dist",
     "declaration": true,
     "sourceMap": true
   },
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
     "node_modules"
-  ],
-  "compilerOptions": {
-    "esModuleInterop": true
-  }
+  ]
 }

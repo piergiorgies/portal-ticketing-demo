@@ -1,16 +1,12 @@
 services:
   web:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    build: ./frontend
     container_name: web
     restart: unless-stopped
     ports:
       - "3000:3000"
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    build: ./backend
     container_name: web
     restart: unless-stopped
     ports:
