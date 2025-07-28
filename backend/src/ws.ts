@@ -1,34 +1,27 @@
 import WebSocket from 'ws'
 import { PortalDeamon } from './services/portal-deamon.js'
+import WebSocketRouter, { LoginUrlMessage, WebSocketMessage } from './routes/ws/router.js'
 
-export const wss = new WebSocket.Server({ port: 8000 })
-
-type GetLoginUrlMessage = {
-    type: 'get-login-url'
-    payload: {}
-}
-
-type LoginUrlMessage = {
-    type: 'login-url'
-    payload: {
-        loginUrl: string
-    }
-}
-
-type ErrorMessage = {
-    type: 'error'
-    payload: {
-        message: string
-    }
-}
-
-type WebSocketMessage = GetLoginUrlMessage | LoginUrlMessage | ErrorMessage
-
-const handleGetLoginUrl = async (): Promise<LoginUrlMessage> => {
+const handleGetLoginUrl = async (ws: WebSocket.WebSocket): Promise<LoginUrlMessage> => {
     const client = await PortalDeamon.getClient()
     const loginUrl = await client.newKeyHandshakeUrl(async (mainKey) => {
         const authResponse = await client.authenticateKey(mainKey)
         console.log('Authentication response:', authResponse)
+
+        if(authResponse.status.status === 'approved') {
+            ws.send(JSON.stringify({
+                type: 'login-approved',
+                payload: {
+                    token: authResponse.status.session_token,
+                    pubkey: mainKey,
+                }
+            }));
+        } else {
+            ws.send(JSON.stringify({
+                type: 'login-declined',
+                payload: {}
+            }));
+        }
     })
 
     return {
@@ -39,31 +32,20 @@ const handleGetLoginUrl = async (): Promise<LoginUrlMessage> => {
     }
 }
 
-wss.on('connection', async (ws) => {
+const router = new WebSocketRouter();
+router.register('get-login-url', async(ws, data) => {
+    ws.send(JSON.stringify(await handleGetLoginUrl(ws)));
+})
+
+export function handleWebsocketConnection(ws: WebSocket.WebSocket) {
     console.log('New client connected')
 
-    ws.on('message', async (message) => {
+    ws.on('message', async(message) => {
         const data = JSON.parse(message.toString()) as WebSocketMessage
-        console.log('Received message:', data)
-
-        switch (data.type) {
-            case 'get-login-url':
-                ws.send(JSON.stringify(await handleGetLoginUrl()))
-                break
-            default:
-                ws.send(
-                    JSON.stringify({
-                        type: 'error',
-                        payload: {
-                            message: `Unknown message type: ${data.type}`,
-                        },
-                    } satisfies ErrorMessage),
-                )
-                break
-        }
+        router.route(data.type, data, ws);
     })
 
     ws.on('close', () => {
         console.log('Client disconnected')
     })
-})
+}

@@ -1,8 +1,4 @@
 {
-  "extends": [
-    "@tsconfig/node-ts/tsconfig.json",
-    "@tsconfig/node22/tsconfig.json"
-  ],
   "buildOptions": {
     "outDir": "build",
     "rootDir": "./src",
@@ -12,5 +8,8 @@
   },
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "compilerOptions": {
+    "esModuleInterop": true
+  }
 }

@@ -1,6 +1,10 @@
 import { app } from './app.js'
-import './ws.js'
+import { handleWebsocketConnection } from './ws.js';
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000')
+app.ws('/ws', (ws, _) => {
+    handleWebsocketConnection(ws);
+})
+
+app.listen(8000, () => {
+    console.log('Server is running on port 8000')
 })

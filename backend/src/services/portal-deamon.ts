@@ -9,7 +9,7 @@ export class PortalDeamon {
 
     private constructor() {
         this.client = new PortalSDK({
-            serverUrl: 'ws://localhost:3002/ws',
+            serverUrl: 'ws://localhost:3000/ws',
             connectTimeout: 10000,
         })
     }
