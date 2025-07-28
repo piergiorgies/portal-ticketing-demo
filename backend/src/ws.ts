@@ -46,7 +46,7 @@ export function handleWebsocketConnection(ws: WebSocket) {
 
     ws.on('message', async(message) => {
         const data = JSON.parse(message.toString()) as WebSocketMessage
-        router.route(data.type, data, ws);
+        router.handle(data, ws);
     })
 
     ws.on('close', () => {
