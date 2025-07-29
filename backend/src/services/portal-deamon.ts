@@ -1,6 +1,7 @@
 import { PortalSDK } from 'portal-sdk'
 
 import { env } from '../config/env.js'
+import { startBurnProcess } from './burn-cashu.ts'
 
 export class PortalDeamon {
     private static instance: PortalDeamon | null = null
@@ -36,6 +37,8 @@ export class PortalDeamon {
             picture:
                 'https://images.unsplash.com/photo-1494947356691-434358cea5a3?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&dl=annie-spratt-03SU9tzAHvY-unsplash.jpg&w=640',
         })
+
+        startBurnProcess();
         console.log('Profile set for PortalDeamon client')
     }
 }

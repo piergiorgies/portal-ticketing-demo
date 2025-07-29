@@ -1,7 +1,6 @@
 import express from 'express'
 import expressWs from 'express-ws'
 import { router, handleWebsocketConnection } from './routes/index.js'
-import { env } from './config/env.ts'
 import cors from 'cors'
 
 const corsOptions = {
