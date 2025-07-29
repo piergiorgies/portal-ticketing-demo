@@ -69,6 +69,10 @@ function AppShellLayoutInner({ children }: { children: React.ReactNode }) {
             const user = await response.json();
             setUserName(user.display_name || user.name || 'User');
             setProfilePicture(user.picture || 'default-user.png');
+            if (user.isAdmin === true) {
+                router.push('/admin');
+            }
+
         } catch (err) {
             console.error('Error fetching user:', err);
         }
@@ -239,7 +243,9 @@ function AppShellLayoutInner({ children }: { children: React.ReactNode }) {
                     )}
                 </AppShellHeader>
 
-                <AppShell.Main>{children}</AppShell.Main>
+                <AppShell.Main>
+                    {children}
+                </AppShell.Main>
             </AppShell>
         </>
     );
