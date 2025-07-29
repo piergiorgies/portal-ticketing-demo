@@ -22,13 +22,13 @@ export const auth: Handler = async (req, res, next) => {
             return res.status(401).json({ error: 'Invalid token' })
         }
 
-        ;(req as EnhancedRequest).user = {
+        ; (req as EnhancedRequest).user = {
             pubKey,
         }
 
         next()
     } catch (error) {
-        console.error('Authentication error:', error)
+        console.log('Authentication error:', error)
         return res.status(500).json({ error: 'Internal Server Error' })
     }
 }

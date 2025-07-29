@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from 'react';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import useWebSocket from 'react-use-websocket';
-
+import './admin.css';
 type BurnFailPayload = { status: string };
 type BurnSuccessPayload = { ticketName: string };
 
@@ -27,6 +27,7 @@ export default function AdminPage() {
     const [websocketUrl, setWebsocketUrl] = useState<string | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [logMessages, setLogMessages] = useState<LogEntry[]>([]);
+    const [highlighted, setHighlighted] = useState<Set<string>>(new Set());
 
     useEffect(() => {
         const token = localStorage.getItem('sessionToken');
@@ -47,7 +48,7 @@ export default function AdminPage() {
                 const parsed: LogEntry[] = JSON.parse(savedLogs);
                 setLogMessages(parsed);
             } catch (err) {
-                console.error('Failed to parse saved logs:', err);
+                console.log('Failed to parse saved logs:', err);
             }
         }
     }, []);
@@ -64,8 +65,7 @@ export default function AdminPage() {
 
         try {
             const data = JSON.parse(lastMessage.data);
-            const timestamp = new Date().toLocaleString();
-
+            const timestamp = new Date().toISOString(); // use ISO for unique ID
             const logEntry: LogEntry = {
                 type: data.type || 'unknown',
                 payload: data.payload || {},
@@ -75,8 +75,18 @@ export default function AdminPage() {
             const updatedLogs = [logEntry, ...logMessages].slice(0, 100);
             setLogMessages(updatedLogs);
             localStorage.setItem('adminMessageLog', JSON.stringify(updatedLogs));
+
+            // Highlight effect
+            setHighlighted((prev) => new Set(prev).add(timestamp));
+            setTimeout(() => {
+                setHighlighted((prev) => {
+                    const next = new Set(prev);
+                    next.delete(timestamp);
+                    return next;
+                });
+            }, 5000);
         } catch (err) {
-            console.error('Invalid WebSocket message:', err);
+            console.log('Invalid WebSocket message:', err);
         }
     }, [lastMessage]);
 
@@ -85,7 +95,7 @@ export default function AdminPage() {
             case 'burn-success':
                 return (
                     <>
-                        <Text c="green" fw={500}><FaCheck /> Ticket Burned Successfully</Text>
+                        <Text c="green" fw={500}><FaCheck /> Ticket Used Successfully</Text>
                         <Text size="sm">Ticket: <strong>{(msg.payload as BurnSuccessPayload).ticketName}</strong></Text>
                     </>
                 );
@@ -93,7 +103,7 @@ export default function AdminPage() {
                 return (
                     <>
                         <Text c="red" fw={500}><FaTimes /> Burn Failed</Text>
-                        <Text size="sm">Reason: <strong>{(msg.payload as BurnFailPayload).status}</strong></Text>
+                        <Text size="sm">Reason: <strong>{(msg.payload as BurnFailPayload).status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</strong></Text>
                     </>
                 );
             default:
@@ -127,7 +137,14 @@ export default function AdminPage() {
                             <Text size="sm" c="dimmed">No messages yet.</Text>
                         )}
                         {logMessages.map((msg, index) => (
-                            <Card key={index} shadow="sm" padding="sm" radius="md" withBorder>
+                            <Card
+                                key={msg.timestamp}
+                                shadow="sm"
+                                padding="sm"
+                                radius="md"
+                                withBorder
+                                className={highlighted.has(msg.timestamp) ? 'lightning' : ''}
+                            >
                                 <Stack gap={4}>
                                     <Group justify="space-between">
                                         <Badge
@@ -139,10 +156,14 @@ export default function AdminPage() {
                                                         : 'gray'
                                             }
                                         >
-                                            {msg.type}
+                                            {msg.type === 'burn-success'
+                                                ? 'Valid'
+                                                : msg.type === 'burn-fail'
+                                                    ? 'Expired'
+                                                    : 'Log Message'}
                                         </Badge>
                                         <Text size="xs" c="dimmed">
-                                            {msg.timestamp}
+                                            {new Date(msg.timestamp).toLocaleString()}
                                         </Text>
                                     </Group>
 

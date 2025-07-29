@@ -49,7 +49,7 @@ export default function BuyTicketsPage() {
                 }
             }
         } catch (error) {
-            console.error('Error parsing lastMessage:', error);
+            console.log('Error parsing lastMessage:', error);
             setLoadingType(null);
             showNotification({
                 title: 'Error',

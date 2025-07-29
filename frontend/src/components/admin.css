@@ -1,0 +1,18 @@
+@keyframes lightningFlash {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 255, 0, 0.9);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+    }
+
+    100% {
+        box-shadow: 0 0 10px rgba(255, 255, 0, 0);
+    }
+}
+
+.lightning {
+    animation: lightningFlash 0.8s ease-in-out;
+    animation-iteration-count: 5;
+}

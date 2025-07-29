@@ -74,7 +74,7 @@ function AppShellLayoutInner({ children }: { children: React.ReactNode }) {
             }
 
         } catch (err) {
-            console.error('Error fetching user:', err);
+            console.log('Error fetching user:', err);
         }
     }, []);
 
@@ -119,7 +119,7 @@ function AppShellLayoutInner({ children }: { children: React.ReactNode }) {
                 getLoginUrl(); // Refresh QR code
             }
         } catch (err) {
-            console.error('Invalid WebSocket message:', err);
+            console.log('Invalid WebSocket message:', err);
         }
     }, [lastMessage, fetchUser, setError, closeLoginModal, getLoginUrl]);
 
