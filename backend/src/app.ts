@@ -7,7 +7,7 @@ import { PortalDeamon } from './services/portal-deamon.ts'
 import { env } from './config/env.ts'
 
 const corsOptions = {
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: ['http://localhost:3000', 'http://localhost:3001', 'http://10.10.2.116:3000', 'http://172.20.10.7:3000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
 }

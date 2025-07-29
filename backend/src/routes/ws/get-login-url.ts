@@ -11,6 +11,8 @@ const adminKeys = env.ADMIN_PUB_NOSTR_KEY.split(',')
 
 export const handleGetLoginUrl = async (ws: WebSocket) => {
     const client = await PortalDeamon.getClient()
+    const staticToken = crypto.randomUUID()
+
     const loginUrl = await client.newKeyHandshakeUrl(async (mainKey) => {
         const authResponse = await client.authenticateKey(mainKey)
         console.log('Authentication response:', authResponse)
@@ -34,7 +36,7 @@ export const handleGetLoginUrl = async (ws: WebSocket) => {
                 } satisfies LoginDeclinedMessage),
             )
         }
-    })
+    }, staticToken);
 
     ws.send(
         JSON.stringify({
