@@ -19,7 +19,7 @@ export async function handleBurnRequest(mainKey: string) {
     const adminWebSocketManager = AdminWebSocketManager.getInstance()
     if(requestCashuResponse.status === 'success') {
         await client.burnCashu(env.CASHU_URL, 'lido', requestCashuResponse.token, env.CASHU_TOKEN);
-        adminWebSocketManager.broadcast(JSON.stringify({ type: 'burn-success', payload: {} }))
+        adminWebSocketManager.broadcast(JSON.stringify({ type: 'burn-success', payload: { ticketName: 'Full Day Ticket' } }))
     } else {
         adminWebSocketManager.broadcast(JSON.stringify({ type: 'burn-fail', payload: { status: requestCashuResponse.status } }))
     }

@@ -19,13 +19,22 @@ app.ws('/ws', (ws) => {
     handleWebsocketConnection(ws)
 })
 app.ws('/admin/ws', async(ws, req) => {
-    const { token, pubkey } = req.query;
-    if(!token || !pubkey) return;
+    const { token, pubKey } = req.query;
+    if(!token || !pubKey) {
+        console.log('No data');
+        return;
+    }
 
     const client = await PortalDeamon.getClient()
-    const isValid = await client.verifyJwt(String(pubkey), String(token));
-    if (!isValid?.target_key) return;
-    if(pubkey !== env.ADMIN_PUB_NOSTR_KEY) return;
+    const isValid = await client.verifyJwt(String(pubKey), String(token));
+    if (!isValid?.target_key) {
+        console.log('JWT not valid');
+        return;
+    }
+    if(pubKey !== env.ADMIN_PUB_NOSTR_KEY_HEX) {
+        console.log('Not an admin');
+        return;
+    }
 
     const manager = AdminWebSocketManager.getInstance()
     manager.addConnection(ws)

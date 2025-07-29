@@ -1,6 +1,7 @@
 import { type RequestHandler } from 'express'
 import { PortalDeamon } from '../../services/portal-deamon.ts'
 import type { EnhancedRequest } from '../../types.ts'
+import { env } from '../../config/env.ts'
 
 export const handler: RequestHandler = async (req, res) => {
     const user = (req as EnhancedRequest).user
@@ -19,5 +20,6 @@ export const handler: RequestHandler = async (req, res) => {
         display_name: userProfile.display_name,
         name: userProfile.name,
         picture: userProfile.picture,
+        isAdmin: user.pubKey === env.ADMIN_PUB_NOSTR_KEY_HEX,
     })
 }
