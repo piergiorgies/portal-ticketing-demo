@@ -5,6 +5,9 @@ import type {
     LoginDeclinedMessage,
     LoginUrlMessage,
 } from './types.ts'
+import { env } from '../../config/env.ts'
+
+const adminKeys = env.ADMIN_PUB_NOSTR_KEY.split(',')
 
 export const handleGetLoginUrl = async (ws: WebSocket) => {
     const client = await PortalDeamon.getClient()
@@ -19,6 +22,7 @@ export const handleGetLoginUrl = async (ws: WebSocket) => {
                     payload: {
                         token: authResponse.status.session_token!,
                         pubkey: mainKey,
+                        isAdmin: adminKeys.includes(mainKey),
                     },
                 } satisfies LoginApprovedMessage),
             )

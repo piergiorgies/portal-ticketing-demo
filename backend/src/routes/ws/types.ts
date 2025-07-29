@@ -30,6 +30,7 @@ export type LoginApprovedMessage = {
     payload: {
         token: string
         pubkey: string
+        isAdmin: boolean
     }
 }
 
